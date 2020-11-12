@@ -5,6 +5,7 @@ import copy
 
 
 def main():
+    #opening file output.txt to write
     outputFile = open(f"output.txt", "w")
     sample, centroids = sys.argv[1], sys.argv[2]
     fs, y = scipy.io.wavfile.read(sample)
@@ -19,24 +20,19 @@ def main():
     Kclusters = np.zeros(pointsToTrain[0])  # the array that contains  32k,2-zero array
     pervList = np.copy(centroids)
     list = np.copy(centroids)
+    #if falg would be numberCentroids then we have the same iter twice results
     flag = 1
     while iter < 30 and flag < numberCentroids[0]:
         flag = 0
         iter += 1
-        # calcluting the distance
+        # calculating the distance
         for i in range(pointsToTrain[0]):
             for j in range(numberCentroids[0]):
                 distancePointCentroids[i, j] = np.sqrt(((x[i][0] - list[j][0]) ** 2) + ((x[i][1] - list[j][1])) ** 2)
-        Kclusters = np.argmin(distancePointCentroids, axis=1)
         # taking the min distance out of the 10 colums
-        # for i in range(pointsToTrain[0]):
-        #     minDist = distancePointCentroids[i, 0]
-        #     for j in range(numberCentroids[0]):
-        #         if minDist > distancePointCentroids[i, j]:
-        #             minDist = distancePointCentroids[i, j]
-        #             Kclusters[i] = j
+        Kclusters = np.argmin(distancePointCentroids, axis=1)
         pervList = np.copy(list)
-        # mean of the clusters
+        # calculating mean of the clusters
         for i in range(numberCentroids[0]):
             check = False
             sumX = 0
@@ -61,19 +57,9 @@ def main():
         for i in range(numberCentroids[0]):
             if list[i][0] == pervList[i][0]:
                 if list[i][1] == pervList[i][1]:
+                    #summing the numer of points that is the same from the prev iter
                     flag += 1
-                         # stop the while not only the for checkkkkk
-        # else copy the list to the pervList
-        # pervList = copy.deepcopy(list)  # check pointer
     outputFile.close()
-
-    # oldCentroids=np.zeros(numberCentroids)
-    # nextCentroids=copy.deepcopy(centroids)
-    #
-    # isSameCentroids=False;
-
-    # scipy.io.wavfile.write("compressed.wav",fs,np.array(new_values,dtype=np.int16))
-
 
 if __name__ == '__main__':
     main()
